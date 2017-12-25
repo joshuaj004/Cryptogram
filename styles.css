@@ -1,0 +1,9 @@
+#characterInputs {
+    font-family:monospace;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.characterInput {
+    width: 50%;
+}
