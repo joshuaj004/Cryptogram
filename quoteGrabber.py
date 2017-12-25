@@ -32,9 +32,10 @@ def api():
     quoteDict = {}
     quoteDict["author"] = shiftedAuthor
     quoteDict["quote"] = shiftedQuote
+    quoteDict["decryptedAuthor"] = quoteInfo['author'].upper()
+    quoteDict["decryptedQuote"] = strippedQuote
     response = jsonify(quoteDict)
     response.headers.add('Access-Control-Allow-Origin', '*')
-
     return response
 
 

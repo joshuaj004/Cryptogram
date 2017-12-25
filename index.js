@@ -87,6 +87,7 @@ function processQuote() {
 
 
 function getQuote() {
+    resetAllValues();
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -96,8 +97,8 @@ function getQuote() {
     }
     xmlHttp.open("GET", LAMBDA_URL, true); // true for asynchronous
     xmlHttp.send(null);
-
 }
+getQuote();
 
 
 function formatDecryptedQuote(quote, author) {
@@ -105,4 +106,15 @@ function formatDecryptedQuote(quote, author) {
     var newAuthor = author.replace(/[a-zA-Z]/g, "*");
     document.getElementById("decryptedQuote").innerHTML = newQuote;
     document.getElementById("decryptedAuthor").innerHTML = newAuthor;
+}
+
+
+function giveUp() {
+    document.getElementById("decryptedQuote").innerHTML = response["decryptedQuote"];
+    document.getElementById("decryptedAuthor").innerHTML = response["decryptedAuthor"];
+}
+
+
+function resetAllValues() {
+  $('.characterInput').find('input:text').val('');
 }
