@@ -16,7 +16,7 @@ function createLetterButtons() {
         innerInput.class = "form-control";
         innerInput.type = "text";
         innerInput.setAttribute("maxlength", "1");
-        innerInput.onchange = letterButtonOnClick(uppercaseASCII[c]);
+        innerInput.oninput = letterButtonOnClick(uppercaseASCII[c]);
         innerInput.id = uppercaseASCII[c];
         divWrapper.appendChild(innerSpan);
         divWrapper.appendChild(innerInput);
