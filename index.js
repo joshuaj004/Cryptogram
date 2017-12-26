@@ -1,10 +1,11 @@
-console.log("We're live here");
-QUOTES_URL1 = 'https://talaikis.com/api/quotes/random/'
 QUOTES_URL = 'http://localhost:5000/'
 LAMBDA_URL = "https://qk5fq1j6i8.execute-api.us-west-2.amazonaws.com/production"
+guessedLetters = [];
+response = {};
 uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 function createLetterButtons() {
+    // var uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     for (var c = 0; c < uppercaseASCII.length; c++) {
         var divWrapper = document.createElement("div");
         divWrapper.className = "input-group";
@@ -16,7 +17,7 @@ function createLetterButtons() {
         innerInput.class = "form-control";
         innerInput.type = "text";
         innerInput.setAttribute("maxlength", "1");
-        innerInput.oninput = letterButtonOnClick(uppercaseASCII[c]);
+        innerInput.oninput = letterButtonOnInput(uppercaseASCII[c]);
         innerInput.id = uppercaseASCII[c];
         divWrapper.appendChild(innerSpan);
         divWrapper.appendChild(innerInput);
@@ -26,8 +27,9 @@ function createLetterButtons() {
 createLetterButtons();
 
 
-function letterButtonOnClick(origLetter) {
+function letterButtonOnInput(origLetter) {
     return function() {
+        // var uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var newValue = document.getElementById(origLetter).value;
         var quoteIndices = getQuoteIndices(origLetter);
         var authorIndices = getAuthorIndices(origLetter);
@@ -35,6 +37,16 @@ function letterButtonOnClick(origLetter) {
             newValue = "*";
         }
         newValue = newValue.toUpperCase();
+        if (uppercaseASCII.indexOf(newValue) > -1) {
+            var guessedLetters = getGuessedLetters();
+            if (guessedLetters.includes(newValue)) {
+                document.getElementById(origLetter).classList.add('text-danger');
+            } else {
+                document.getElementById(origLetter).classList.remove('text-danger');
+            }
+        } else {
+            document.getElementById(origLetter).classList.remove('text-danger');
+        }
         var decryptedQuote = document.getElementById("decryptedQuote").innerHTML;
         var decryptedAuthor = document.getElementById("decryptedAuthor").innerHTML;
         for (var i = 0; i < quoteIndices.length; i++) {
@@ -46,6 +58,26 @@ function letterButtonOnClick(origLetter) {
         document.getElementById("decryptedQuote").innerHTML = decryptedQuote;
         document.getElementById("decryptedAuthor").innerHTML = decryptedAuthor;
     }
+}
+
+
+function getGuessedLetters() {
+    var guessedLetters = [];
+    var duplicates = [];
+    for (var c = 0; c < uppercaseASCII.length; c++) {
+        var letter = document.getElementById(uppercaseASCII[c]).value.toUpperCase();
+        if (letter == "") {
+            continue;
+        }
+        if (uppercaseASCII.indexOf(letter) > -1) {
+            if (guessedLetters.indexOf(letter) > -1) {
+                duplicates.push(letter);
+            } else {
+                guessedLetters.push(letter);
+            }            
+        }
+    }
+    return duplicates;
 }
 
 
@@ -95,7 +127,7 @@ function getQuote() {
             processQuote();
         }
     }
-    xmlHttp.open("GET", LAMBDA_URL, true); // true for asynchronous
+    xmlHttp.open("GET", QUOTES_URL, true); // true for asynchronous
     xmlHttp.send(null);
 }
 getQuote();
@@ -117,4 +149,34 @@ function giveUp() {
 
 function resetAllValues() {
   $('.characterInput').find('input:text').val('');
+}
+
+
+function checkCorrect() {
+    if (document.getElementById("decryptedQuote").innerHTML == response["decryptedQuote"] 
+        && document.getElementById("decryptedAuthor").innerHTML == response["decryptedAuthor"]) {
+        swal(
+            'Good job!',
+            'Both are correct!',
+            'success'
+        );
+    } else if (document.getElementById("decryptedQuote").innerHTML == response["decryptedQuote"]) {
+        swal(
+            'Close!',
+            'The quote is correct, but the author isn\'t!',
+            'info'
+        );
+    } else if (document.getElementById("decryptedAuthor").innerHTML == response["decryptedAuthor"]) {
+        swal(
+            'Close!',
+            'The author is correct, but the quote isn\'t!',
+            'info'
+        );
+    } else {
+        swal(
+            'Keep Trying!',
+            'Neither the author nor the quote is correct!',
+            'warning'
+        );
+    }
 }

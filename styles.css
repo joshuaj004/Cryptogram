@@ -7,3 +7,7 @@
 .characterInput {
     width: 50%;
 }
+
+.characterInput input[type="text"] {
+    text-transform: uppercase;
+}
