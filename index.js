@@ -31,6 +31,11 @@ function letterButtonOnInput(origLetter) {
     return function() {
         // var uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var newValue = document.getElementById(origLetter).value;
+        // It's basically sanitized input, right?
+        if (!/^[a-zA-Z]*$/g.test(newValue)) {
+            document.getElementById(origLetter).value = "";
+            return;
+        }
         var quoteIndices = getQuoteIndices(origLetter);
         var authorIndices = getAuthorIndices(origLetter);
         if (newValue == "") {
