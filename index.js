@@ -127,7 +127,7 @@ function getQuote() {
             processQuote();
         }
     }
-    xmlHttp.open("GET", QUOTES_URL, true); // true for asynchronous
+    xmlHttp.open("GET", LAMBDA_URL, true); // true for asynchronous
     xmlHttp.send(null);
 }
 getQuote();
