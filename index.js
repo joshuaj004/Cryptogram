@@ -5,7 +5,6 @@ response = {};
 uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 function createLetterButtons() {
-    // var uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     for (var c = 0; c < uppercaseASCII.length; c++) {
         var divWrapper = document.createElement("div");
         divWrapper.className = "input-group";
@@ -29,7 +28,6 @@ createLetterButtons();
 
 function letterButtonOnInput(origLetter) {
     return function() {
-        // var uppercaseASCII = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var newValue = document.getElementById(origLetter).value;
         // It's basically sanitized input, right?
         if (!/^[a-zA-Z]*$/g.test(newValue)) {
@@ -92,11 +90,11 @@ function replaceString(string, char, index) {
 }
 
 
-function getAuthorIndices(origLetter) {
-    var indices = [];
-    var encryptedAuthor = response["author"];
-    for (var i = 0; i < encryptedAuthor.length; i++) {
-        if (encryptedAuthor[i] == origLetter) {
+function getStringIndices(type, letter) {
+    indices = [];
+    var encryptedString = response[type];
+    for (var i = 0; i < encryptedString.length; i++) {
+        if (encryptedString[i] == letter) {
             indices.push(i);
         }
     }
@@ -104,15 +102,13 @@ function getAuthorIndices(origLetter) {
 }
 
 
+function getAuthorIndices(origLetter) {
+    return getStringIndices("author" , origLetter);
+}
+
+
 function getQuoteIndices(origLetter) {
-    var indices = [];
-    var encryptedQuote = response["quote"];
-    for (var i = 0; i < encryptedQuote.length; i++) {
-        if (encryptedQuote[i] == origLetter) {
-            indices.push(i);
-        }
-    }
-    return indices;
+    return getStringIndices("quote" , origLetter);
 }
 
 
